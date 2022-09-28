@@ -1,3 +1,4 @@
+using Kitchen.Data;
 using Kitchen.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IHostedService, KitchenService>();
+builder.Services.AddSingleton<Menu>();
+builder.Services.AddSingleton<IKitchenService, KitchenService>();
 
 var app = builder.Build();
 
@@ -22,5 +24,11 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+    var _ = services.GetRequiredService<IKitchenService>();
+}
 
 app.Run();

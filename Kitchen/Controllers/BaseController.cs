@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Kitchen.Dtos;
+using Kitchen.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Kitchen.Controllers
 {
@@ -7,16 +9,19 @@ namespace Kitchen.Controllers
     public class BaseController : ControllerBase
     {
         private readonly ILogger<BaseController> _logger;
+        private readonly IKitchenService _kitchenService;
 
-        public BaseController(ILogger<BaseController> logger)
+        public BaseController(ILogger<BaseController> logger, IKitchenService kitchenService)
         {
             _logger = logger;
+            _kitchenService = kitchenService;
         }
 
         [HttpPost("order")]
-        public IActionResult RecieveOrder()
+        public IActionResult RecieveOrder(OrderDto orderDto)
         {
-            _logger.LogInformation("Order recieved");
+            _logger.LogInformation($"Kitchen: Recieved order with id: {orderDto.OrderId}");
+            _kitchenService.TakeOrder(orderDto);
 
             return Ok();
         }

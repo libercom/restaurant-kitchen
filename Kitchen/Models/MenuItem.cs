@@ -8,6 +8,6 @@ namespace Kitchen.Models
         public string Name { get; set; }
         public int PreparationTime { get; set; }
         public int Complexity { get; set; }
-        public AparatusType Aparatus { get; set; }
+        public string CookingApparatus { get; set; }
     }
 }
